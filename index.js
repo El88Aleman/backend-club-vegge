@@ -9,7 +9,11 @@ mercadopago.configure({
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://www.clubvegge.com.ar", "https://club-vegge.vercel.app"],
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Todo Ok");
