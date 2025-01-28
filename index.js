@@ -9,7 +9,7 @@ mercadopago.configure({
 });
 
 app.use(express.json());
-app.use(cors({ origin: "https://www.clubvegge.com.ar" }));
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Todo Ok");
@@ -18,8 +18,8 @@ app.post("/create_preference", (req, res) => {
   let preference = {
     items: req.body.items,
     back_urls: {
-      success: "https://www.clubvegge.com.ar/",
-      failure: "https://www.clubvegge.com.ar/",
+      success: "https://www.clubvegge.com.ar/home",
+      failure: "https://www.clubvegge.com.ar/home",
       pending: "",
     },
     auto_return: "approved",
