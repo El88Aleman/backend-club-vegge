@@ -1,23 +1,16 @@
 import express from "express";
 import cors from "cors";
-import mercadopago from "mercadopago";
-import dotenv from "dotenv";
+import { MercadoPagoConfig, Preference } from "mercadopago";
 
-dotenv.config();
-mercadopago.configure({
-  access_token: process.env.ACCESS_TOKEN,
+const client = new MercadoPagoConfig({
+  access_token:
+    "APP_USR-2047497174336582-012817-15a95deae18b9ac1a3cda92a99fa97fe-253417623",
 });
 
 const app = express();
 const port = 8080;
 
-app.use(
-  cors({
-    origin: ["https://www.clubvegge.com.ar", "https://club-vegge.vercel.app"],
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -25,25 +18,26 @@ app.get("/", (req, res) => {
 });
 app.post("/create_preference", async (req, res) => {
   try {
-    console.log("Datos recibidos:", req.body);
-    const preference = {
-      items: req.body.items,
+    const body = {
+      items: [
+        {
+          title: req.body.title,
+          quantity: Number(req.body.quantity),
+          unit_price: Number(req.body.unit_price),
+          currency_id: "ARS",
+        },
+      ],
       back_urls: {
         success: "https://www.clubvegge.com.ar/home",
         failure: "https://www.clubvegge.com.ar/home",
         pending: "https://www.clubvegge.com.ar/home",
       },
       auto_return: "approved",
-      shipments: {
-        cost: req.body.shipment_cost,
-        mode: "not_specified",
-      },
     };
-    console.log("Preferencia creada:", preference);
-    const response = await mercadopago.preferences.create(preference);
-    console.log("Respuesta de MercadoPago:", response);
+    const preference = new Preference(client);
+    const result = await preference.create({ body });
     res.json({
-      id: response.body.id,
+      id: result.id,
     });
   } catch (error) {
     console.log(error);
