@@ -14,6 +14,8 @@ const port = 8080;
 app.use(
   cors({
     origin: ["https://www.clubvegge.com.ar", "https://club-vegge.vercel.app"],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json());
