@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import mercadopago from "mercadopago";
 import dotenv from "dotenv";
 
 dotenv.config();
-const client = new MercadoPagoConfig({
+mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN,
 });
 
