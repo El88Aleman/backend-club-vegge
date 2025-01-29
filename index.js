@@ -9,7 +9,11 @@ const client = new MercadoPagoConfig({
 const app = express();
 const port = 8080;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://www.clubvegge.com.ar", "https://club-vegge.vercel.app"],
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
