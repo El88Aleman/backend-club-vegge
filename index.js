@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import { MercadoPagoConfig, Preference } from "mercadopago";
+import dotenv from "dotenv";
 
+dotenv.config();
 const client = new MercadoPagoConfig({
   access_token: process.env.ACCESS_TOKEN,
 });
@@ -21,6 +23,7 @@ app.get("/", (req, res) => {
 });
 app.post("/create_preference", async (req, res) => {
   try {
+    console.log("Datos recibidos:", req.body);
     const preference = {
       items: req.body.items,
       back_urls: {
@@ -34,7 +37,9 @@ app.post("/create_preference", async (req, res) => {
         mode: "not_specified",
       },
     };
+    console.log("Preferencia creada:", preference);
     const response = await mercadopago.preferences.create(preference);
+    console.log("Respuesta de MercadoPago:", response);
     res.json({
       id: response.body.id,
     });
