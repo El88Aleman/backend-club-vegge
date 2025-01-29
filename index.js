@@ -21,26 +21,22 @@ app.get("/", (req, res) => {
 });
 app.post("/create_preference", async (req, res) => {
   try {
-    const body = {
-      items: [
-        {
-          title: req.body.title,
-          quantity: Number(req.body.quantity),
-          unit_price: Number(req.body.unit_price),
-          currency_id: "ARS",
-        },
-      ],
+    const preference = {
+      items: req.body.items,
       back_urls: {
         success: "https://www.clubvegge.com.ar/home",
         failure: "https://www.clubvegge.com.ar/home",
         pending: "https://www.clubvegge.com.ar/home",
       },
       auto_return: "approved",
+      shipments: {
+        cost: req.body.shipment_cost,
+        mode: "not_specified",
+      },
     };
-    const preference = new Preference(client);
-    const result = await preference.create({ body });
+    const response = await mercadopago.preferences.create(preference);
     res.json({
-      id: result.id,
+      id: response.body.id,
     });
   } catch (error) {
     console.log(error);
